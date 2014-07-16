@@ -1,5 +1,5 @@
 from unittest import TestCase
-from cards.deck import Card, Deck, RANKS, SUITS
+from pycards.deck import Card, Deck, RANKS, SUITS
 
 class TestDeck(TestCase):
 
