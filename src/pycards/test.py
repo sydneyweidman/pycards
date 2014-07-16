@@ -1,5 +1,6 @@
 from unittest import TestCase
 from pycards.deck import Card, Deck, RANKS, SUITS
+from pycards.game import Player, Hand, Game
 
 class TestDeck(TestCase):
 
