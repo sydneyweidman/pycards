@@ -1,7 +1,7 @@
 ##############################################################################
 ##
-##     Copyright University of Winnipeg, 2014
-##     Author: Sydney Weidman <s.weidman@uwinnipeg.ca>
+##     Copyright Sydney Weidman, 2014
+##     Author: Sydney Weidman <sydney.weidman@gmail.com>
 ##
 ##     This program is free software: you can redistribute it and/or modify
 ##     it under the terms of the GNU General Public License as published by
@@ -30,12 +30,16 @@ class Player(object):
         - `name`: The player's name'
         """
         self.name = name
+        self.hand = None
+
+    def __repr__(self):
+        return self.name
 
 class Hand(object):
     """A class representing a hand of cards
     """
     
-    def __init__(self, cards):
+    def __init__(self, cards=[]):
         """Create the hand
         
         Arguments:
@@ -44,14 +48,22 @@ class Hand(object):
         self.cardcount = len(cards)
         self.cards = cards
 
+    def __len__(self):
+        return len(self.cards)
+    
     def discard(self, cards):
         """Discard one or more cards"""
         for card in cards:
             self.cards.remove(card)
 
-    def pickup(self, cards):
+    def draw(self, cards):
         """Pickup one or more cards"""
         self.cards.extend(cards)
+        
+    def value(self):
+        """The numerical value of the hand, if any
+        """
+        return sum([i.value for i in self.cards])
 
 class GameState(object):
     """A list of dictionaries containing the game state. Each element of the list represents one turn.
@@ -67,27 +79,47 @@ class GameState(object):
             self.state = saved_game
         else:
             self.state = []
-        
 
 class Game(object):
     """A card game
+
+    >>> from pycards.game import Game # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+    >>> g = Game(2,{'a':None,'b':None})
+    >>> g.players
+    {'a': a, 'b': b}
+    >>> g.run()
+    >>> g.started
+    True
     """
     
-    def __init__(self, players, rules, saved_game):
+    def __init__(self, cardcount, playerlist={}, saved_game=None):
         """Set up the card game. Save the game state in the "turns" attribute.
         
         Arguments:
-        - `players`: A list of Player instances
-        - `rules`: A set of rules describing the game
-        - `saved_game`: A game that was previously saved
+        - `cardcount`:   The initial cardcount
+        - `playerlist`:  The players' names in a dict
+        - `saved_game`:  A game that was previously saved
         """
-        self.players = players
+        self.players = playerlist
+        for p in self.players:
+            self.add_player(p)
+        self.cardcount = cardcount
         self.deck = Deck()
-        self.turns = GameState()
+        self.state = GameState(saved_game)
+        self.started = False
 
+    def add_player(self, name):
+        """Add a player
+        
+        Arguments:
+        - `name`: The player's name'
+        """
+        self.players[name] = Player(name)
+        self.players[name].hand = Hand()
+         
     def run(self):
         "Start the game"
-        pass
+        self.started = True
 
         
 

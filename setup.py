@@ -7,5 +7,5 @@ setup(
     author_email = "sydney.weidman@gmail.com",
     packages = find_packages('src'),
     package_dir = {'':'src'},
-    version="0.1",
+    version="0.2",
     )

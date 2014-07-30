@@ -6,6 +6,21 @@ SUITS = tuple("hearts diamonds spades clubs".split())
 
 class Card(object):
     """A playing card
+>>> from pycards.game import Game
+>>> from pycards.deck import Card
+>>> g = Game(['a','b'])
+>>> g.deck.deal(['a','b'],2) # doctest: +NORMALIZE_WHITESPACE
+    {'a': [king of clubs, king of diamonds], 'b': [king of spades, king of hearts]}
+>>> len(g.deck)
+48
+>>> Card(suit='clubs',rank='king') not in g.deck # after being dealt, the card is no longer in the deck
+True
+>>> Card(suit='diamonds',rank='king') not in g.deck
+True
+>>> Card(suit='clubs',rank='nine') not in g.deck
+False
+>>> Card(suit='spades',rank='ace') in g.deck
+True
     """
     
     def __init__(self, rank, suit, value=None):
@@ -53,6 +68,12 @@ class Deck(object):
     
     def __iter__(self):
         return self
+
+    def __contains__(self, card):
+        for i in self.deck:
+            if i == card:
+                return True
+        return False
 
     def shuffle(self):
         random.shuffle(self.deck)
