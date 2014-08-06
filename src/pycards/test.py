@@ -63,7 +63,10 @@ class TestDeck(TestCase):
     def test_shuffle(self):
         """Make sure the deck is shuffled properly"""
         self.instance.shuffle()
-        assert(self.instance.dealone() != Card('ace','hearts'))
+        unshuffled = Deck()
+        # testing that at least one card differs. Dumb, but how else to check
+        # so that the test doesn't fail randomly?
+        assert(not all([self.instance.deck[i] == unshuffled.deck[i] for i in range(52)]))
 
     def test_no_shuffle(self):
         """Make sure the first card in an unshuffled deck is the king of clubs"""
