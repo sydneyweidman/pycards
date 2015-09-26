@@ -17,7 +17,7 @@
 ##     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 ##############################################################################
-from pycards.deck import Deck
+from deck import Deck
 
 class Player(object):
     """A class representing a player
@@ -39,26 +39,29 @@ class Hand(object):
     """A class representing a hand of cards
     """
     
-    def __init__(self, cards=[]):
+    def __init__(self, from_deck):
         """Create the hand
         
         Arguments:
         - `cards`: The a list of card instances with which to initialize the hand
         """
-        self.cardcount = len(cards)
-        self.cards = cards
+        self.from_deck = from_deck
+        self.cards = []
 
     def __len__(self):
         return len(self.cards)
     
-    def discard(self, cards):
+    def discard(self, card):
         """Discard one or more cards"""
-        for card in cards:
-            self.cards.remove(card)
-
-    def draw(self, cards):
-        """Pickup one or more cards"""
-        self.cards.extend(cards)
+        for c in self.cards:
+            if c == card:
+                self.cards.remove(c)
+                
+    def draw(self):
+        """Pickup one card"""
+        drawn = self.from_deck.dealone()
+        self.cards.append(drawn)
+        return drawn
         
     def value(self):
         """The numerical value of the hand, if any
@@ -83,7 +86,7 @@ class GameState(object):
 class Game(object):
     """A card game
 
-    >>> from pycards.game import Game # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+    >>> from game import Game # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
     >>> g = Game(2,{'a':None,'b':None})
     >>> g.players
     {'a': a, 'b': b}
@@ -92,7 +95,7 @@ class Game(object):
     True
     """
     
-    def __init__(self, cardcount, playerlist={}, saved_game=None):
+    def __init__(self, cardcount, playerlist={}, saved_game=None, shuffled=True):
         """Set up the card game. Save the game state in the "turns" attribute.
         
         Arguments:
@@ -101,10 +104,12 @@ class Game(object):
         - `saved_game`:  A game that was previously saved
         """
         self.players = playerlist
+        self.deck = Deck()
+        if shuffled:
+            self.deck.shuffle()
         for p in self.players:
             self.add_player(p)
         self.cardcount = cardcount
-        self.deck = Deck()
         self.state = GameState(saved_game)
         self.started = False
 
@@ -115,12 +120,18 @@ class Game(object):
         - `name`: The player's name'
         """
         self.players[name] = Player(name)
-        self.players[name].hand = Hand()
+        self.players[name].hand = Hand(self.deck)
          
     def run(self):
         "Start the game"
         self.started = True
 
         
-
-
+if __name__ == '__main__':
+    deck = Deck()
+    deck.shuffle()
+    hand = Hand(deck)
+    for i in range(5):
+        print hand.draw()
+    print hand.cards
+    

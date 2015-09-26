@@ -8,7 +8,7 @@ class Card(object):
     """A playing card
 >>> from pycards.game import Game
 >>> from pycards.deck import Card
->>> g = Game(['a','b'])
+>>> g = Game(['a','b'], shuffled=False)
 >>> g.deck.deal(['a','b'],2) # doctest: +NORMALIZE_WHITESPACE
     {'a': [king of clubs, king of diamonds], 'b': [king of spades, king of hearts]}
 >>> len(g.deck)
