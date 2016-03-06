@@ -22,10 +22,10 @@ False
 >>> Card(suit='spades',rank='ace') in g.deck
 True
     """
-    
+
     def __init__(self, rank, suit, value=None):
         """Initialize the card with rank and suit
-        
+
         Arguments:
         - `rank`: The rank of the card
         - `suit`: The suit of the card
@@ -44,28 +44,31 @@ True
         return self.value > other.value
 
     def __eq__(self, other):
-        return (isinstance(other, self.__class__) and (self.rank == other.rank)
-                and (self.suit == other.suit))
+        return (isinstance(other, self.__class__) and
+                (self.rank == other.rank) and
+                (self.suit == other.suit))
 
     def __ne__(self, other):
         return not self.__eq__(other)
-        
+
     def __repr__(self):
         return u'%s of %s' % (self.rank, self.suit)
+
 
 class Deck(object):
     """An object representing a deck of cards
     """
-    
+
     def __init__(self):
         """Create the unshuffled deck
         """
-        self.deck = [Card(rank,suit) for (rank,suit) in itertools.product(RANKS,SUITS)]
+        self.deck = [Card(rank, suit) for
+                     (rank, suit) in itertools.product(RANKS, SUITS)]
         self.idx = 0
 
     def __len__(self):
         return len(self.deck)
-    
+
     def __iter__(self):
         return self
 
@@ -109,4 +112,3 @@ if __name__ == '__main__':
     deck.shuffle()
     for card in deck:
         print card
-        
