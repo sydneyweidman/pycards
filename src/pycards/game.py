@@ -20,7 +20,16 @@
 from deck import Deck
 
 
-class Player(object):
+class Person(object):
+
+    def __init__(self, name, address, phone):
+        """Basic person information"""
+        self.name = name
+        self.address = address
+        self.phone = phone
+
+
+class Player(Person):
     """A class representing a player
     """
 
@@ -29,47 +38,47 @@ class Player(object):
 
         Arguments:
         - `name`: The player's name'
+
+        >>> from game import Player
+        >>> person = Player(name='Fred')
+        >>> person.name
+        'Fred'
         """
-        self.name = name
-        self.hand = None
+        super(Player, self).__init__(name, address=None, phone=None)
+        self.hand = Hand()
 
     def __repr__(self):
         return self.name
 
 
-class Hand(object):
+class Hand(list):
     """A class representing a hand of cards
     """
 
-    def __init__(self, from_deck):
+    def __init__(self, cards=None, from_deck=None):
         """Create the hand
 
         Arguments:
-        - `cards`: The a list of card instances with which to initialize
-        the hand
+        cards: The cards with which to build the hand
+        from_deck: The Deck object from which the cards are drawn
         """
         self.from_deck = from_deck
-        self.cards = []
-
-    def __len__(self):
-        return len(self.cards)
+        self.cards = cards
 
     def discard(self, card):
         """Discard one or more cards"""
-        for c in self.cards:
-            if c == card:
-                self.cards.remove(c)
+        self.remove(card)
 
     def draw(self):
         """Pickup one card"""
         drawn = self.from_deck.dealone()
-        self.cards.append(drawn)
+        self.append(drawn)
         return drawn
 
     def value(self):
         """The numerical value of the hand, if any
         """
-        return sum([i.value for i in self.cards])
+        return sum([i.value for i in self])
 
 
 class GameState(object):

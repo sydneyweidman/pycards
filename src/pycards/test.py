@@ -1,22 +1,6 @@
 from unittest import TestCase
 from pycards.deck import Card, Deck, RANKS, SUITS
-from pycards.game import Hand, Game
-
-
-class TestHand(TestCase):
-
-    def setUp(self):
-        self.deck = Deck()
-        self.cards = []
-        self.cards.extend([Card(rank='nine', suit='hearts'),
-                           Card(rank='ten', suit='diamonds'),
-                           Card('ten', 'spades'),
-                           Card(rank='three', suit='clubs')])
-        self.instance = Hand(self.cards)
-
-    def test_value(self):
-        """Make sure the value of the hand is calculated correctly"""
-        self.assertEqual(self.instance.value(), 32)
+from pycards.game import Game
 
 
 class TestGame(TestCase):
@@ -28,17 +12,6 @@ class TestGame(TestCase):
 
     def test_playerlist(self):
         assert(self.instance.players['a'].name == 'a')
-
-    def test_deal(self):
-        """Test that dealing works"""
-        playerlist = [self.instance.players[i].name
-                      for i in self.instance.players]
-        hands = self.instance.deck.deal(playerlist, self.cardcount)
-        for player in hands:
-            self.instance.add_player(player)
-        for player in hands:
-            self.instance.players[player].hand = Hand(hands[player])
-        self.assertEqual(len(self.instance.players['a'].hand), self.cardcount)
 
 
 class TestDeck(TestCase):

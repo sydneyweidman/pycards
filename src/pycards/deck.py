@@ -1,26 +1,28 @@
 import random
 import itertools
 
-RANKS = tuple("ace two three four five six seven eight nine ten jack queen king".split())
+RANKS = tuple("ace two three four five six seven \
+               eight nine ten jack queen king".split())
 SUITS = tuple("hearts diamonds spades clubs".split())
+
 
 class Card(object):
     """A playing card
->>> from pycards.game import Game
->>> from pycards.deck import Card
->>> g = Game(['a','b'], shuffled=False)
->>> g.deck.deal(['a','b'],2) # doctest: +NORMALIZE_WHITESPACE
+    >>> from pycards.game import Game
+    >>> from pycards.deck import Card
+    >>> g = Game(['a','b'], shuffled=False)
+    >>> g.deck.deal(['a','b'],2) # doctest: +NORMALIZE_WHITESPACE
     {'a': [king of clubs, king of diamonds], 'b': [king of spades, king of hearts]}
->>> len(g.deck)
-48
->>> Card(suit='clubs',rank='king') not in g.deck # after being dealt, the card is no longer in the deck
-True
->>> Card(suit='diamonds',rank='king') not in g.deck
-True
->>> Card(suit='clubs',rank='nine') not in g.deck
-False
->>> Card(suit='spades',rank='ace') in g.deck
-True
+    >>> len(g.deck)
+    48
+    >>> Card(suit='clubs',rank='king') not in g.deck
+    True
+    >>> Card(suit='diamonds',rank='king') not in g.deck
+    True
+    >>> Card(suit='clubs',rank='nine') not in g.deck
+    False
+    >>> Card(suit='spades',rank='ace') in g.deck
+    True
     """
 
     def __init__(self, rank, suit, value=None):
