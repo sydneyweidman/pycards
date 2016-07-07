@@ -46,7 +46,7 @@ class TestDeck(TestCase):
         unshuffled = Deck()
         # testing that at least one card differs. Dumb, but how else to check
         # so that the test doesn't fail randomly?
-        assert(not all([self.instance.deck[i] == unshuffled.deck[i]
+        assert(not all([self.instance[i] == unshuffled[i]
                         for i in range(52)]))
 
     def test_no_shuffle(self):

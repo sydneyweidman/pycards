@@ -1,4 +1,5 @@
 import random
+from collections import MutableSequence
 import itertools
 
 RANKS = tuple("ace two three four five six seven \
@@ -57,47 +58,42 @@ class Card(object):
         return u'%s of %s' % (self.rank, self.suit)
 
 
-class Deck(object):
+class Deck(MutableSequence):
     """An object representing a deck of cards
     """
 
     def __init__(self):
         """Create the unshuffled deck
         """
-        self.deck = [Card(rank, suit) for
-                     (rank, suit) in itertools.product(RANKS, SUITS)]
-        self.idx = 0
+        self._deck = list()
+        for (rank, suit) in itertools.product(RANKS, SUITS):
+            self._deck.append(Card(rank, suit))
 
     def __len__(self):
-        return len(self.deck)
+        return len(self._deck)
 
-    def __iter__(self):
-        return self
+    def __getitem__(self, idx):
+        return self._deck[idx]
 
-    def __contains__(self, card):
-        for i in self.deck:
-            if i == card:
-                return True
-        return False
+    def __setitem__(self, card, idx):
+        self._deck[idx] = card
+        return self._deck[idx]
+
+    def __delitem__(self, idx):
+        del self._deck[idx]
 
     def shuffle(self):
-        random.shuffle(self.deck)
-
-    def next(self):
-        try:
-            card = self.deck[self.idx]
-            self.idx += 1
-            return card
-        except IndexError:
-            raise StopIteration
+        random.shuffle(self._deck)
 
     def dealone(self):
-        card = self.deck.pop()
-        self.idx -= 1
+        card = self._deck.pop()
         return card
 
+    def insert(self, card, idx):
+        self._deck.insert(idx, card)
+
     def deal(self, players, cardcount):
-        if len(players)*cardcount > len(self.deck):
+        if len(players) * cardcount > len(self):
             raise ValueError
         hand = dict()
         for p in players:
