@@ -26,15 +26,18 @@ class Card(object):
     True
     """
 
-    def __init__(self, rank, suit, value=None):
+    def __init__(self, rank, suit, value=None, tag='deck'):
         """Initialize the card with rank and suit
 
         Arguments:
         - `rank`: The rank of the card
         - `suit`: The suit of the card
+        - `value`: The card value
+        - `tag`: A tag indicating the area of the card (hand, discard pile etc)
         """
         self.rank = rank
         self.suit = suit
+        self.tag = tag
         if value:
             self.value = value
         else:
@@ -58,19 +61,53 @@ class Card(object):
         return u'%s of %s' % (self.rank, self.suit)
 
 
+class Hand(object):
+    """A class representing a hand of cards
+    """
+
+    def __init__(self, player=None, from_deck=None):
+        """Create the hand
+
+        Arguments:
+        player: The cards with which to build the hand
+        from_deck: The Deck object from which the cards are drawn
+        """
+        self.from_deck = from_deck
+        self.player = player
+
+    def __len__(self):
+        return len([i for i in self.from_deck if i.tag == self.player.name])
+
+    def discard(self, card, to_location='discard'):
+        """Discard one or more cards"""
+        card.tag = to_location
+
+    def draw(self):
+        """Pickup one card"""
+        drawn = self.from_deck.dealone(self.player.name)
+        return drawn
+
+    def value(self):
+        """The numerical value of the hand, if any
+        """
+        return sum([i.value for i in self.from_deck
+                    if i.tag == self.player.name])
+
+
 class Deck(MutableSequence):
     """An object representing a deck of cards
     """
 
-    def __init__(self):
+    def __init__(self, prepopulate=True, shuffle=False):
         """Create the unshuffled deck
         """
         self._deck = list()
-        for (rank, suit) in itertools.product(RANKS, SUITS):
-            self._deck.append(Card(rank, suit))
+        if prepopulate:
+            for (rank, suit) in itertools.product(RANKS, SUITS):
+                self._deck.append(Card(rank, suit))
 
     def __len__(self):
-        return len(self._deck)
+        return len([i for i in self._deck if i.tag == 'deck'])
 
     def __getitem__(self, idx):
         return self._deck[idx]
@@ -85,28 +122,31 @@ class Deck(MutableSequence):
     def shuffle(self):
         random.shuffle(self._deck)
 
-    def dealone(self):
-        card = self._deck.pop()
+    def dealone(self, to_location):
+        card = self._deck[len(self) - 1]
+        card.tag = to_location
         return card
 
-    def insert(self, card, idx):
-        self._deck.insert(idx, card)
+    def insert(self, card, idx=0):
+        self._deck.insert(card, idx)
 
     def deal(self, players, cardcount):
         if len(players) * cardcount > len(self):
             raise ValueError
-        hand = dict()
+        hands = {}
         for p in players:
-            hand[p] = []
+            hands[p] = []
         for c in xrange(cardcount):
             for p in players:
-                hand[p].append(self.dealone())
-        return hand
+                hands[p].append(self.dealone(p))
+        return hands
 
 if __name__ == '__main__':
     deck = Deck()
-    for card in deck:
-        print card
     deck.shuffle()
-    for card in deck:
-        print card
+    players = ['fred', 'bill', 'sam', 'eddie']
+    hands = deck.deal(players, 5)
+    for p in hands:
+        print "%s's hand:'" % (p,)
+        for card in hands[p]:
+            print card

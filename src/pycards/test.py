@@ -7,11 +7,11 @@ class TestGame(TestCase):
 
     def setUp(self):
         self.cardcount = 5
-        playerlist = {'a': None, 'b': None}
+        playerlist = ['a', 'b']
         self.instance = Game(cardcount=self.cardcount, playerlist=playerlist)
 
     def test_playerlist(self):
-        assert(self.instance.players['a'].name == 'a')
+        assert(self.instance.players[0].name == 'a')
 
 
 class TestDeck(TestCase):
@@ -25,18 +25,18 @@ class TestDeck(TestCase):
 
     def test_card_rank(self):
         """Make sure rank is valid"""
-        card = self.instance.dealone()
+        card = self.instance.dealone(to_location='discard')
         assert(card.rank in RANKS)
 
     def test_card_suit(self):
         """Make sure the suit is valid"""
-        card = self.instance.dealone()
+        card = self.instance.dealone(to_location='discard')
         assert(card.suit in SUITS)
 
     def test_dealone(self):
         """Make sure deck is reduced by one when we deal a card"""
         l1 = len(self.instance)
-        self.instance.dealone()
+        self.instance.dealone('discard')
         l2 = len(self.instance)
         assert(l1 - l2 == 1)
 
@@ -52,7 +52,7 @@ class TestDeck(TestCase):
     def test_no_shuffle(self):
         """Make sure the first card in an unshuffled deck is the king
         of clubs"""
-        assert(self.instance.dealone() == Card('king', 'clubs'))
+        assert(self.instance.dealone('discard') == Card('king', 'clubs'))
 
     def test_deal_no_shuffle(self):
         """Make sure deal works as expected"""
@@ -61,7 +61,7 @@ class TestDeck(TestCase):
         ks = Card('king', 'spades')
         kh = Card('king', 'hearts')
         expected = {'a': [kc, kd], 'b': [ks, kh]}
-        actual = self.instance.deal(['a', 'b'], 2)
+        actual = self.instance.deal(players=['a', 'b'], cardcount=2)
         assert(actual == expected)
 
     def test_deal_length_change(self):
