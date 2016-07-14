@@ -33,11 +33,6 @@ class Player(object):
 
         Arguments:
         - `name`: The player's name'
-
-        >>> from game import Player
-        >>> person = Player(name='Fred')
-        >>> person.name
-        'Fred'
         """
         self.hand = None
         self.name = name
@@ -65,14 +60,6 @@ class GameState(object):
 
 class Game(object):
     """A card game
-
-    >>> from game import Game # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
-    >>> g = Game(2,{'a':None,'b':None})
-    >>> g.players
-    {'a': a, 'b': b}
-    >>> g.run()
-    >>> g.started
-    True
     """
 
     def __init__(self, cardcount,
@@ -110,12 +97,3 @@ class Game(object):
     def run(self):
         "Start the game"
         self.started = True
-
-
-if __name__ == '__main__':
-    deck = Deck()
-    deck.shuffle()
-    hand = Hand(deck)
-    for i in range(5):
-        print hand.draw()
-    print hand.cards

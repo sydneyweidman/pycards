@@ -9,21 +9,6 @@ SUITS = tuple("hearts diamonds spades clubs".split())
 
 class Card(object):
     """A playing card
-    >>> from pycards.game import Game
-    >>> from pycards.deck import Card
-    >>> g = Game(['a','b'], shuffled=False)
-    >>> g.deck.deal(['a','b'],2) # doctest: +NORMALIZE_WHITESPACE
-    {'a': [king of clubs, king of diamonds], 'b': [king of spades, king of hearts]}
-    >>> len(g.deck)
-    48
-    >>> Card(suit='clubs',rank='king') not in g.deck
-    True
-    >>> Card(suit='diamonds',rank='king') not in g.deck
-    True
-    >>> Card(suit='clubs',rank='nine') not in g.deck
-    False
-    >>> Card(suit='spades',rank='ace') in g.deck
-    True
     """
 
     def __init__(self, rank, suit, value=None, tag='deck'):
@@ -98,13 +83,11 @@ class Deck(MutableSequence):
     """An object representing a deck of cards
     """
 
-    def __init__(self, prepopulate=True, shuffle=False):
+    def __init__(self, shuffle=False, cards=None):
         """Create the unshuffled deck
         """
         self._deck = list()
-        if prepopulate:
-            for (rank, suit) in itertools.product(RANKS, SUITS):
-                self._deck.append(Card(rank, suit))
+        self.populate(cards)
 
     def __len__(self):
         return len([i for i in self._deck if i.tag == 'deck'])
@@ -118,6 +101,18 @@ class Deck(MutableSequence):
 
     def __delitem__(self, idx):
         del self._deck[idx]
+
+    def populate(self, cards=None):
+        """Generate a standard Deck or create from a list of Card objects"""
+        if cards is not None and len(cards) > 0:
+            for card in cards:
+                if type(card) == Card:
+                    self._deck.append(card)
+                else:
+                    raise TypeError("%s is not of type Card" % (card,))
+        else:
+            for (rank, suit) in itertools.product(RANKS, SUITS):
+                self._deck.append(Card(rank, suit))
 
     def shuffle(self):
         random.shuffle(self._deck)
@@ -140,13 +135,3 @@ class Deck(MutableSequence):
             for p in players:
                 hands[p].append(self.dealone(p))
         return hands
-
-if __name__ == '__main__':
-    deck = Deck()
-    deck.shuffle()
-    players = ['fred', 'bill', 'sam', 'eddie']
-    hands = deck.deal(players, 5)
-    for p in hands:
-        print "%s's hand:'" % (p,)
-        for card in hands[p]:
-            print card
