@@ -2,11 +2,11 @@ from setuptools import setup, find_packages
 
 
 def readme():
-    return open('README.org').read()
+    return open('README.rst').read()
 
 setup(
     name="pycards",
-    version="0.2.1a0",
+    version="0.2.1",
     description="A python-based card game framework",
     long_description=readme(),
     author="Sydney Weidman",
