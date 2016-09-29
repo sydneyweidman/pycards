@@ -33,6 +33,16 @@ class TestDeck(TestCase):
         card = self.instance.dealone()
         assert(card.suit in SUITS)
 
+    def test_card_value(self):
+        """Make sure the value is applied to the card"""
+        card = Card(rank='king', suit='spades', value=42)
+        self.assertEqual(card.value, 42)
+
+    def test_card_comparator_lt(self):
+        card1 = Card('two', 'hearts', value=11)
+        card2 = Card('two', 'hearts', value=12)
+        assert card1 < card2
+
     def test_dealone(self):
         """Make sure deck is reduced by one when we deal a card"""
         l1 = len(self.instance)

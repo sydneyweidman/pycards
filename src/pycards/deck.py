@@ -12,7 +12,8 @@ class Card(object):
     >>> from pycards.deck import Card
     >>> g = Game(['a','b'], shuffled=False)
     >>> g.deck.deal(['a','b'],2) # doctest: +NORMALIZE_WHITESPACE
-    {'a': [king of clubs, king of diamonds], 'b': [king of spades, king of hearts]}
+    {'a': [king of clubs, king of diamonds],
+     'b': [king of spades, king of hearts]}
     >>> len(g.deck)
     48
     >>> Card(suit='clubs',rank='king') not in g.deck
@@ -47,8 +48,7 @@ class Card(object):
 
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
-                (self.rank == other.rank) and
-                (self.suit == other.suit))
+               (self.value == other.value))
 
     def __ne__(self, other):
         return not self.__eq__(other)

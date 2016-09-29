@@ -64,3 +64,8 @@ target/
 
 # Submlime-text
 *.sublime-workspace
+
+# PyCharm
+.idea/
+/TAGS
+.ropeproject/

@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#     Copyright Sydney Weidman, 2014
+#     Copyright Sydney Weidman, 2016
 #     Author: Sydney Weidman <sydney.weidman@gmail.com>
 #
 #     This program is free software: you can redistribute it and/or modify
