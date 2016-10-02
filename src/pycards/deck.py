@@ -25,7 +25,7 @@ class Card(object):
         if value:
             self.value = value
         else:
-            self.value = min(RANKS.index(self.rank) + 1, 10)
+            self.value = 0
 
     def __lt__(self, other):
         return self.value < other.value
@@ -52,7 +52,7 @@ class Hand(object):
         """Create the hand
 
         Arguments:
-        player: The cards with which to build the hand
+        player: The player holding the hand
         from_deck: The Deck object from which the cards are drawn
         """
         self.from_deck = from_deck
@@ -62,7 +62,7 @@ class Hand(object):
         return len([i for i in self.from_deck if i.tag == self.player.name])
 
     def discard(self, card, to_location='discard'):
-        """Discard one or more cards"""
+        """Discard one card"""
         card.tag = to_location
 
     def draw(self):
@@ -93,7 +93,7 @@ class Deck(MutableSequence):
     def __getitem__(self, idx):
         return self._deck[idx]
 
-    def __setitem__(self, card, idx):
+    def __setitem__(self, idx, card):
         self._deck[idx] = card
         return self._deck[idx]
 
@@ -110,7 +110,8 @@ class Deck(MutableSequence):
                     raise TypeError("%s is not of type Card" % (card,))
         else:
             for (rank, suit) in itertools.product(RANKS, SUITS):
-                self._deck.append(Card(rank, suit))
+                value = min(RANKS.index(rank) + 1, 10)
+                self._deck.append(Card(rank, suit, value))
 
     def shuffle(self):
         random.shuffle(self._deck)

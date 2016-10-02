@@ -6,13 +6,14 @@ def readme():
 
 setup(
     name="pycards",
-    version="0.2.1",
+    version="0.2.2a1",
     description="A python-based card game framework",
     long_description=readme(),
     author="Sydney Weidman",
     author_email="sydney.weidman@gmail.com",
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    test_suite="pycards.test",
+    tests_require=['nose', 'coverage'],
+    test_suite="nose.collector",
     include_package_data=True,
 )
