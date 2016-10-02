@@ -89,8 +89,8 @@ class TestDeck(TestCase):
 
     def test_card_comparator_lt(self):
         """Does __lt__ work as expected?"""
-        card1 = Card('two', 'hearts')
-        card2 = Card('three', 'spades')
+        card1 = Card('two', 'hearts', 2)
+        card2 = Card('three', 'spades', 3)
         assert card1 < card2
 
     def test_card_comparator_gt(self):
@@ -104,6 +104,11 @@ class TestDeck(TestCase):
         card1 = Card('two', 'hearts', value=11)
         card2 = Card('two', 'hearts', value=12)
         self.assertTrue(card2 != card1)
+
+    def test_deck_repr(self):
+        """Repr should return a descriptive string"""
+        card = Card('two', 'hearts', value=2)
+        self.assertEqual(u'two of hearts', card.__repr__())
 
     def test_deck_setitem(self):
         """Can we insert cards into the deck?"""
@@ -134,10 +139,10 @@ class TestDeck(TestCase):
 
     def test_deal_no_shuffle(self):
         """Make sure deal works as expected"""
-        kc = Card('king', 'clubs')
-        kd = Card('king', 'diamonds')
-        ks = Card('king', 'spades')
-        kh = Card('king', 'hearts')
+        kc = Card('king', 'clubs', 10)
+        kd = Card('king', 'diamonds', 10)
+        ks = Card('king', 'spades', 10)
+        kh = Card('king', 'hearts', 10)
         expected = {'a': [kc, kd], 'b': [ks, kh]}
         actual = self.instance.deal(players=['a', 'b'], cardcount=2)
         assert(actual == expected)
