@@ -41,7 +41,7 @@ class Card(object):
         return not self.__eq__(other)
 
     def __repr__(self):
-        return u'%s of %s' % (self.rank, self.suit)
+        return '%s of %s' % (self.rank, self.suit)
 
 
 class Hand(object):
@@ -130,7 +130,7 @@ class Deck(MutableSequence):
         hands = {}
         for p in players:
             hands[p] = []
-        for c in xrange(cardcount):
+        for c in range(cardcount):
             for p in players:
                 hands[p].append(self.dealone(p))
         return hands

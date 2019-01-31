@@ -18,7 +18,7 @@
 #
 ##############################################################################
 import logging
-from deck import Deck, Hand
+from .deck import Deck, Hand
 
 log = logging.getLogger('pycards.game')
 logging.basicConfig(level=logging.DEBUG)

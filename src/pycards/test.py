@@ -108,7 +108,7 @@ class TestDeck(TestCase):
     def test_deck_repr(self):
         """Repr should return a descriptive string"""
         card = Card('two', 'hearts', value=2)
-        self.assertEqual(u'two of hearts', card.__repr__())
+        self.assertEqual('two of hearts', card.__repr__())
 
     def test_deck_setitem(self):
         """Can we insert cards into the deck?"""
