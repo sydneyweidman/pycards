@@ -1,5 +1,4 @@
 import random
-from collections import MutableSequence
 import itertools
 
 RANKS = tuple("ace two three four five six seven \
@@ -77,7 +76,7 @@ class Hand(object):
                     if i.tag == self.player.name])
 
 
-class Deck(MutableSequence):
+class Deck(object):
     """An object representing a deck of cards
     """
 
@@ -104,7 +103,7 @@ class Deck(MutableSequence):
         """Generate a standard Deck or create from a list of Card objects"""
         if cards is not None and len(cards) > 0:
             for card in cards:
-                if type(card) == Card:
+                if isinstance(card, Card):
                     self._deck.append(card)
                 else:
                     raise TypeError("%s is not of type Card" % (card,))
@@ -124,13 +123,10 @@ class Deck(MutableSequence):
     def insert(self, card, idx=0):
         self._deck.insert(card, idx)
 
-    def deal(self, players, cardcount):
+    def deal(self, players, cardcount=2):
         if len(players) * cardcount > len(self):
             raise ValueError
         hands = {}
         for p in players:
-            hands[p] = []
-        for c in range(cardcount):
-            for p in players:
-                hands[p].append(self.dealone(p))
+            hands[p].append(self.dealone(p))
         return hands

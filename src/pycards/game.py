@@ -18,7 +18,8 @@
 #
 ##############################################################################
 import logging
-from .deck import Deck, Hand
+from .deck import Deck
+
 
 log = logging.getLogger('pycards.game')
 logging.basicConfig(level=logging.DEBUG)
@@ -62,7 +63,7 @@ class Game(object):
     """A card game
     """
 
-    def __init__(self, cardcount,
+    def __init__(self, cardcount=2,
                  playerlist=[],
                  saved_game=None,
                  shuffled=True):
