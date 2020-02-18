@@ -72,3 +72,5 @@ target/
 
 # Pipenv
 Pipenv.lock
+/Pipfile.lock
+/.dir-locals.el
